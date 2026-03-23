@@ -3,28 +3,42 @@
 #include <chrono>
 
 using namespace std;
+using namespace std;chrono;
 
-void multiplicar(int n) {
-    vector<vector<double>> A(n, vector<double>(n, 1.0));
-    vector<vector<double>> B(n, vector<double>(n, 1.0));
-    vector<vector<double>> C(n, vector<double>(n, 0.0));
-    auto inicio = chrono::high_resolution_clock::now();
-
+void multiplyMatrices(const vector<vector<int>>& A, const vector<vector<int>>& B, vector<vector<int>>& C, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
+            C[i][j] = 0;
             for (int k = 0; k < n; k++) {
                 C[i][j] += A[i][k] * B[k][j];
             }
         }
     }
-    auto fin = chrono::high_resolution_clock::now();
-    chrono::duration<double> tiempo = fin - inicio;
-    cout << "Tamaño " << n << "x" << n << ": " << tiempo.count() << " segundos" << endl;
 }
 
 int main() {
-    multiplicar(200);
-    multiplicar(500);
-    multiplicar(1000); 
+    int n;
+    cout << "Ingresa el tamano de la matriz: ";
+    cin >> n;
+
+    vector<vector<int>> A(n, vector<int>(n));
+    vector<vector<int>> B(n, vector<int>(n));
+    vector<vector<int>> C(n, vector<int>(n, 0));
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            A[i][j] = rand() % 10;
+            B[i][j] = rand() % 10;
+        }
+    }
+
+    auto start = high_resolution_clock::now();
+    multiplyMatrices(A, B, C, n);
+    auto stop = high_resolution_clock::now();
+
+    auto duration = duration_cast<microseconds>(stop - start);
+
+    cout << "Tiempo de ejecucion: " << duration.count() << " microsegundos." << endl;
+
     return 0;
 }
